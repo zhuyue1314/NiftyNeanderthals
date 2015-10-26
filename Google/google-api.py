@@ -11,8 +11,8 @@ except:
 
 
 # Edit as required
-GOOGLE_UID = "ADD_CSE_UID"
-GOOGLE_CSE = "ADD_CSE"
+GOOGLE_UID = "ADD_CSE_USER"
+GOOGLE_CSE = "ADD_CSE_ID"
 GOOGLE_API_KEY = "ADD_API_KEY"
 # Google Custom Search URL
 GOOGLE_URL = "https://www.googleapis.com/customsearch/v1?key=" + GOOGLE_API_KEY + "&cx=" + GOOGLE_UID + ":" + GOOGLE_CSE + "&q="

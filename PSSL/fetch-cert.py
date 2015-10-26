@@ -1,5 +1,8 @@
 #!/usr/bin/python
-# Query the CIRC.lu Passive SSL database
+# Fetch the raw SSL/TLS Certificate from the CIRC.lu database
+
+# Usage: ./fetch-cert.py.dist -q c46fed822dadac3f31f9bb4d1a78a1d9eae4567b
+# Output: JSON
 
 import argparse
 import sys

@@ -1,6 +1,9 @@
 #!/usr/bin/python
 # Returns a list of seen IP addresses for the requested certificate
 
+# Usage: ./query-cert.py.dist -q c46fed822dadac3f31f9bb4d1a78a1d9eae4567b
+# Output: JSON
+
 import argparse
 import sys
 import json

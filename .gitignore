@@ -56,7 +56,13 @@ docs/_build/
 # PyBuilder
 target/
 
+# Vim stuff
 .ropeproject/
 
+# Default files and output
 *.json
 *.dist
+
+# Temporary
+Shodan/
+Utils/

@@ -9,10 +9,11 @@ try:
 except:
     sys.exit("[ERROR] Python Requests library required")
 
+
 # Edit as required
-GOOGLE_UID = "GOOG-UID"
-GOOGLE_CSE = "GOOG-CSE"
-GOOGLE_API_KEY = "GOOG-API-KEY"
+GOOGLE_UID = "ADD_CSE_UID"
+GOOGLE_CSE = "ADD_CSE"
+GOOGLE_API_KEY = "ADD_API_KEY"
 # Google Custom Search URL
 GOOGLE_URL = "https://www.googleapis.com/customsearch/v1?key=" + GOOGLE_API_KEY + "&cx=" + GOOGLE_UID + ":" + GOOGLE_CSE + "&q="
 

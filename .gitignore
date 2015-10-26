@@ -59,3 +59,4 @@ target/
 .ropeproject/
 
 *.json
+*.dist

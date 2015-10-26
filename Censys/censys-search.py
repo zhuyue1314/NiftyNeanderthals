@@ -35,63 +35,33 @@ def check_status(http_status_code):
         print "200"
 
 
-def query_cert(QUERYSTRING, OUTPUT):
-    """Query Censys.io for a certificate"""
-    API_URL = "https://www.censys.io/api/v1/search/certificates?"
-    HTTP_DATA = {"query": "%s" % QUERYSTRING}
-    print "Querying API...",
-    res = requests.post(API_URL, auth=(UID, SECRET), data=json.dumps(HTTP_DATA), verify=True)
-    check_status(res.status_code)
-    data = res.json()
-    matches = data["metadata"]["count"]
-    if matches >= 1:
-        print "Matches: " + str(matches)
-    else:
-        sys.exit("[INFO] No Matches Found :(")
-    print "[INFO] Writing output to file"
-    if OUTPUT is None:
-        OUTPUT = QUERYSTRING + ".json"
-        with open(OUTPUT, 'w') as output:
-            json.dump(data, output)
-    else:
-        with open(OUTPUT, 'w') as output:
-            json.dump(data, output)
+def get_api_url(QUERYTYPE, QUERYSTRING):
+    """Get the correct API URL"""
+    BASE_URL = "https://www.censys.io/api/v1/search/"
+
+    if QUERYTYPE == "ipv4":
+        API_URL = BASE_URL + "ipv4?"
+        HTTP_DATA = {"query": "ip:%s" % QUERYSTRING}
+    elif QUERYTYPE == "websites":
+        API_URL = BASE_URL + "websites?"
+        HTTP_DATA = {"query": "%s" % QUERYSTRING}
+    elif QUERYTYPE == "certificates":
+        API_URL = BASE_URL + "certificates?"
+        HTTP_DATA = {"query": "%s" % QUERYSTRING}
+
+    return API_URL, HTTP_DATA
 
 
-def query_ipv4(QUERYSTRING, OUTPUT):
+def query_api(QUERYTYPE, QUERYSTRING, OUTPUT):
     """Query the API"""
-    API_URL = "https://www.censys.io/api/v1/search/ipv4?"
-    HTTP_DATA = {"query": "ip:%s" % QUERYSTRING}
+    API_URL = get_api_url(QUERYTYPE, QUERYSTRING)
     print "Querying API...",
-    res = requests.post(API_URL, auth=(UID, SECRET), data=json.dumps(HTTP_DATA), verify=True)
+    res = requests.post(API_URL[0], auth=(UID, SECRET), data=json.dumps(API_URL[1]), verify=True)
     check_status(res.status_code)
     data = res.json()
     matches = data["metadata"]["count"]
     if matches >= 1:
-        print "Matches: " + str(matches)
-    else:
-        sys.exit("[INFO] No Matches Found :(")
-    print "[INFO] Writing output to file"
-    if OUTPUT is None:
-        OUTPUT = QUERYSTRING + ".json"
-        with open(OUTPUT, 'w') as output:
-            json.dump(data, output)
-    else:
-        with open(OUTPUT, 'w') as output:
-            json.dump(data, output)
-
-
-def query_website(QUERYSTRING, OUTPUT):
-    """Query the API"""
-    API_URL = "https://www.censys.io/api/v1/search/websites?"
-    HTTP_DATA = {"query": "%s" % QUERYSTRING}
-    print "Querying API...",
-    res = requests.post(API_URL, auth=(UID, SECRET), data=json.dumps(HTTP_DATA), verify=True)
-    check_status(res.status_code)
-    data = res.json()
-    matches = data["metadata"]["count"]
-    if matches >= 1:
-        print "Matches: " + str(matches)
+        print "[INFO] Found Matches: " + str(matches)
     else:
         sys.exit("[INFO] No Matches Found :(")
     print "[INFO] Writing output to file"
@@ -118,11 +88,14 @@ def __main__():
     OUTPUT = args.output
 
     if args.querywebsite:
-        query_website(QUERYSTRING, OUTPUT)
+        QUERYTYPE = "websites"
+        query_api(QUERYTYPE, QUERYSTRING, OUTPUT)
     elif args.queryipv4:
-        query_ipv4(QUERYSTRING, OUTPUT)
+        QUERYTYPE = "ipv4"
+        query_api(QUERYTYPE, QUERYSTRING, OUTPUT)
     elif args.querycert:
-        query_cert(QUERYSTRING, OUTPUT)
+        QUERYTYPE = "certificates"
+        query_api(QUERYTYPE, QUERYSTRING, OUTPUT)
     else:
         sys.exit("[ERROR] Query type required")
 

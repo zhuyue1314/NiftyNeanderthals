@@ -1,8 +1,5 @@
 #!/usr/bin/python
-# Query the CIRC.lu Passive SSL database for a range of IP addresses (/32 to /23)
-
-# Usage: ./query-api.py -q 192.168.0.0/32
-# Output: JSON
+# Query the CIRC.lu Passive SSL database
 
 import argparse
 import sys
@@ -21,13 +18,13 @@ AUTH_PASS = "YOUR_PASSWORD"
 def query_api(QUERY, OUTPUT):
     """Query the SSL API"""
     print "Query: " + str(QUERY)
-    API_URL = "https://www.circl.lu/v2pssl/query/" + str(QUERY)
+    API_URL = "https://www.circl.lu/v2pssl/cfetch/" + str(QUERY)
     req = requests.get(API_URL, auth=(AUTH_USER, AUTH_PASS))
     if req.status_code == 200:
         print "Writing output: ",
         data = req.json()
         if OUTPUT is None:
-            QUERYT = QUERY.replace('/', '_') + ".json"
+            QUERYT = QUERY + ".json"
             print QUERYT
             with open(QUERYT, 'w') as fh:
                 json.dump(data, fh)

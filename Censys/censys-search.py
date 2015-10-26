@@ -31,9 +31,9 @@ def query_api(QUERYTYPE, QUERYSTRING, OUTPUT):
     else:
         sys.exit("[ERROR] Correct query type required")
 
-    API_URL = "https://www.censys.io/api/v1/search/" + str(QUERYTYPE) + "/" + str(QUERYSTRING)
+    API_URL = "https://www.censys.io/api/v1/search/" + QUERYTYPE + "/" + QUERYSTRING
     print "Querying API...",
-    res = requests.get(API_URL, auth=(UID, SECRET), verify=False)
+    res = requests.get(API_URL, auth=(UID, SECRET), verify=True)
     print res.status_code
     if res.status_code == 404:
         sys.exit("[ERROR] 404 - Data not found")
@@ -41,9 +41,9 @@ def query_api(QUERYTYPE, QUERYSTRING, OUTPUT):
         sys.exit("[ERROR] 429 - Rate Limit Exceeded")
     elif res.status_code == 500:
         sys.exit("[ERROR] 500 - Internal Server Error")
-    elif res.status_code != 200:
-        sys.exit("error occurred: %s" % res.json()["error"])
-    else:
+    elif res.status_code == 405:
+        sys.exit("[ERROR] Something has gone horribly wrong !!")
+    elif res.status_code == 200:
         data = res.json()
         print "Writing output to file"
         if OUTPUT is None:
@@ -53,6 +53,8 @@ def query_api(QUERYTYPE, QUERYSTRING, OUTPUT):
         else:
             with open(OUTPUT, 'w') as output:
                 json.dump(data, output)
+    else:
+        sys.exit("[ERROR] Unhandled Exception.")
 
 
 def __main__():
@@ -71,7 +73,6 @@ def __main__():
         sys.exit(parser.print_help())
     else:
         query_api(QUERYTYPE, QUERYSTRING, OUTPUT)
-
 
 if __name__ == '__main__':
     __main__()

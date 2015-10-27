@@ -23,7 +23,7 @@ def compare_hashes(ip_cert, bad_hashes):
 
 def get_ip_certs(INFILE, ipaddr):
     """Get a list of certs associated with an IP"""
-    print "\nChecking IP: " + ipaddr,
+    print "[Checking] : " + ipaddr,
     with open(INFILE, 'r') as fh:
         jsondata = json.load(fh)
         certs = jsondata[ipaddr]["certificates"]
@@ -68,12 +68,13 @@ def pull_ips(INFILE, IPRANGE):
 
 def parse_input(INFILE, BLACKLIST, IPRANGE):
     """Parsing input file"""
-    print "Input file: " + INFILE
-    print "IP Range: " + IPRANGE
-    print "Black list: " + BLACKLIST
     ips = pull_ips(INFILE, IPRANGE)
     bad_hashes = get_bad_cert_hashes(BLACKLIST)
-    print "Bad hashes: " + str(len(bad_hashes))
+    print "[INFO] Input file: " + INFILE
+    print "[INFO] IP Range: " + IPRANGE
+    print "[INFO] IP Addresses: " + str(len(ips))
+    print "[INFO] Black list: " + BLACKLIST
+    print "[INFO] Bad hashes: " + str(len(bad_hashes)) + "\n"
 
     for ipaddr in ips:
         ip_certs = get_ip_certs(INFILE, ipaddr)

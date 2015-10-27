@@ -62,6 +62,7 @@ target/
 # Default files and output
 *.json
 *.dist
+*.txt
 
 # Temporary
 Shodan/

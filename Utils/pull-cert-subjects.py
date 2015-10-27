@@ -43,7 +43,7 @@ def get_ip_certs(INFILE, ipaddr):
     with open(INFILE, 'r') as fh:
         jsondata = json.load(fh)
         certs = jsondata[ipaddr]["certificates"]
-        print "[" + str(len(certs)) + "]"
+        print "[" + str(len(certs)) + " Certifcates]"
 
     return certs
 
